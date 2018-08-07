@@ -34,15 +34,35 @@
     var geometry = new THREE.BoxGeometry(1, 1, 1);
     var material = new THREE.MeshBasicMaterial({ map: texture });
     var cube = new THREE.Mesh(geometry, material);
+    var cube2 = new THREE.Mesh(geometry, material);
     scene.add(cube);
+
+
+
 
     //
 
     camera.position.z = 5;
+    let going_back = 0;
 
     function animate() {
       cube.rotation.x += 0.01;
       cube.rotation.y += 0.01;
+      console.log(`The y position is ${cube.position.y}`);
+      if (!going_back) {
+        cube.position.y += 0.01;
+      }
+      else {
+        cube.position.y -= 0.01;
+      }
+      if (cube.position.y > 2) {
+        going_back = 1;
+      }
+      if (cube.position.y < -2) {
+        going_back = 0;
+
+      }
+
       requestAnimationFrame(animate);
       renderer.render(scene, camera);
     }
