@@ -19,6 +19,8 @@
 <body>
   <script src="js/three_smaller.js"></script>
   <script>
+    /* global THREE */
+    let going_back = 0;
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
@@ -38,12 +40,26 @@
     scene.add(cube);
 
 
+    function moveCubeUp(speed, cube) {
 
+      if (!going_back) {
+        cube.position.y += speed;
+      }
+      else {
+        cube.position.y -= speed;
+      }
+      if (cube.position.y > 2) {
+        going_back = 1;
+      }
+      else if (cube.position.y < -2) {
+        going_back = 0;
+      }
+    }
 
     //
 
     camera.position.z = 5;
-    let going_back = 0;
+
 
     function animate() {
       cube.rotation.x += 0.01;
