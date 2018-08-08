@@ -41,30 +41,21 @@
     camera.position.z = 5;
 
     spawnCubes(3);
-    console.log(`Cubes 0 is ${cubes[0]}`);
-    console.log(`Cubes 1 is ${cubes[1]}`);
-    console.log(`Cubes 2 is ${cubes[2]}`);
-    console.log(`Cubes 3 is ${cubes[3]}`);
-
     cubes[1].position.x = 1.5;
     cubes[2].position.x = -1.5;
+    //cubes[3].position.x = -2.5;
 
 
-    // MAIN LOOP
+    //////// MAIN LOOP
     function animate() {
       rotateCubes(cubes, 0.01);
-
-      sleep(2000);
-      moveCubeUp(0.01, cubes);
-
+      moveCube(0.01, cubes);
 
       requestAnimationFrame(animate);
       renderer.render(scene, camera);
     }
     animate();
-    // END MAIN LOOP
-
-
+    //////// END MAIN LOOP
 
     function spawnCubes(numberOfCubes) {
       for (let x = 0; x < numberOfCubes; x++) {
@@ -80,47 +71,22 @@
       }
     }
 
-
-    function moveCubeUp(speed, cube_temp) {
-      console.log("Performing movecube up function");
-      console.log(`Going back is ${going_back}`);
-      for (let x = 0; x < 3; x++) {
-        console.log(`The value of x is: ${x}`);
+    function moveCube(speed, cube_temp) {
+      for (let x = 0; x < cube_temp.length; x++) {
         if (going_back === 0) {
           cube_temp[x].position.y += speed;
-          console.log("Moving y position up");
         }
         else {
           cube_temp[x].position.y -= speed;
-          console.log("Moving y position down");
         }
         if (cube_temp[x].position.y > 2) {
           going_back = 1;
-          console.log("Set going back to 1");
         }
         else if (cube_temp[x].position.y < -2) {
           going_back = 0;
-          console.log("Set going back to 0");
         }
       }
     }
-
-    function sleep_s(secs) {
-      secs = (+new Date) + secs * 1000;
-      while ((+new Date) < secs);
-    }
-
-    function sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    async function demo() {
-      console.log('Taking a break...');
-      await sleep(2000);
-      console.log('Two second later');
-    }
-
-    demo();
   </script>
 </body>
 
