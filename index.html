@@ -22,28 +22,29 @@
     /* global THREE */
     /* global cubes */
     let going_back = 0;
-    var cubes = [];
+    let total_cubes = 0;
+
 
 
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 5;
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-    scene.add(directionalLight);
+
     THREE.ImageUtils.crossOrigin = '';
     var texture = THREE.ImageUtils.loadTexture('https://pbs.twimg.com/profile_images/788823098795536384/IDbV8F5D_400x400.jpg');
     texture.anisotropy = renderer.getMaxAnisotropy();
-    var geometry = new THREE.BoxGeometry(1, 1, 1);
+    var geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
     var material = new THREE.MeshBasicMaterial({ map: texture });
-    camera.position.z = 5;
 
-    spawnCubes(3);
-    cubes[1].position.x = 1.5;
-    cubes[2].position.x = -1.5;
-    //cubes[3].position.x = -2.5;
+
+    let cubes = [];
+    spawnCubes(12);
+    placeCubes(cubes, 0.4);
+    console.log(`${total_cubes} cubes have been placed`);
 
 
     //////// MAIN LOOP
@@ -56,6 +57,19 @@
     }
     animate();
     //////// END MAIN LOOP
+
+    function placeCubes(cubes, offset) {
+      for (let x = 0; x < cubes.length; x++) {
+        total_cubes += 1;
+        if (cubes[x].position.x > 2) {
+          cubes[x].position.x = (x / 2) + offset;
+
+        }
+        else if (cubes[x].position.x < 2) {
+          cubes[x].position.x = (x / 2) - offset
+        }
+      }
+    }
 
     function spawnCubes(numberOfCubes) {
       for (let x = 0; x < numberOfCubes; x++) {
