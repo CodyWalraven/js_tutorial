@@ -20,10 +20,13 @@
   <script src="js/three_smaller.js"></script>
   <script>
     /* global THREE */
+    /* global cubes */
     let going_back = 0;
+    var cubes = [];
+
+
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
@@ -35,52 +38,89 @@
     texture.anisotropy = renderer.getMaxAnisotropy();
     var geometry = new THREE.BoxGeometry(1, 1, 1);
     var material = new THREE.MeshBasicMaterial({ map: texture });
-    var cube = new THREE.Mesh(geometry, material);
-    var cube2 = new THREE.Mesh(geometry, material);
-    var cube3 = new THREE.Mesh(geometry, material);
-    var cube4 = new THREE.Mesh(geometry, material);
     camera.position.z = 5;
-    scene.add(cube);
-    scene.add(cube2);
-    scene.add(cube3);
-    cube2.position.x = 1.5;
-    cube3.position.x = -1.5;
+
+    spawnCubes(3);
+    console.log(`Cubes 0 is ${cubes[0]}`);
+    console.log(`Cubes 1 is ${cubes[1]}`);
+    console.log(`Cubes 2 is ${cubes[2]}`);
+    console.log(`Cubes 3 is ${cubes[3]}`);
+
+    cubes[1].position.x = 1.5;
+    cubes[2].position.x = -1.5;
 
 
-
-
+    // MAIN LOOP
     function animate() {
-      cube.rotation.x += 0.01;
-      cube.rotation.y += 0.01;
-      cube2.rotation.x += 0.01;
-      cube2.rotation.y += 0.01;
-      cube3.rotation.x += 0.01;
-      cube3.rotation.y += 0.01;
-      moveCubeUp(0.01, cube);
-      moveCubeUp(0.01, cube2);
-      moveCubeUp(0.01, cube3);
+      rotateCubes(cubes, 0.01);
+
+      sleep(2000);
+      moveCubeUp(0.01, cubes);
+
 
       requestAnimationFrame(animate);
       renderer.render(scene, camera);
     }
     animate();
+    // END MAIN LOOP
 
 
-    function moveCubeUp(speed, cube) {
 
-      if (!going_back) {
-        cube.position.y += speed;
-      }
-      else {
-        cube.position.y -= speed;
-      }
-      if (cube.position.y > 2) {
-        going_back = 1;
-      }
-      else if (cube.position.y < -2) {
-        going_back = 0;
+    function spawnCubes(numberOfCubes) {
+      for (let x = 0; x < numberOfCubes; x++) {
+        cubes[x] = new THREE.Mesh(geometry, material);
+        scene.add(cubes[x]);
       }
     }
+
+    function rotateCubes(cube_instance, speed) {
+      for (let x = 0; x < cubes.length; x++) {
+        cube_instance[x].rotation.x += speed;
+        cube_instance[x].rotation.y += speed;
+      }
+    }
+
+
+    function moveCubeUp(speed, cube_temp) {
+      console.log("Performing movecube up function");
+      console.log(`Going back is ${going_back}`);
+      for (let x = 0; x < 3; x++) {
+        console.log(`The value of x is: ${x}`);
+        if (going_back === 0) {
+          cube_temp[x].position.y += speed;
+          console.log("Moving y position up");
+        }
+        else {
+          cube_temp[x].position.y -= speed;
+          console.log("Moving y position down");
+        }
+        if (cube_temp[x].position.y > 2) {
+          going_back = 1;
+          console.log("Set going back to 1");
+        }
+        else if (cube_temp[x].position.y < -2) {
+          going_back = 0;
+          console.log("Set going back to 0");
+        }
+      }
+    }
+
+    function sleep_s(secs) {
+      secs = (+new Date) + secs * 1000;
+      while ((+new Date) < secs);
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function demo() {
+      console.log('Taking a break...');
+      await sleep(2000);
+      console.log('Two second later');
+    }
+
+    demo();
   </script>
 </body>
 
