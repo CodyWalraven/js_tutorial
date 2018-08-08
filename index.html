@@ -37,7 +37,33 @@
     var material = new THREE.MeshBasicMaterial({ map: texture });
     var cube = new THREE.Mesh(geometry, material);
     var cube2 = new THREE.Mesh(geometry, material);
+    var cube3 = new THREE.Mesh(geometry, material);
+    var cube4 = new THREE.Mesh(geometry, material);
+    camera.position.z = 5;
     scene.add(cube);
+    scene.add(cube2);
+    scene.add(cube3);
+    cube2.position.x = 1.5;
+    cube3.position.x = -1.5;
+
+
+
+
+    function animate() {
+      cube.rotation.x += 0.01;
+      cube.rotation.y += 0.01;
+      cube2.rotation.x += 0.01;
+      cube2.rotation.y += 0.01;
+      cube3.rotation.x += 0.01;
+      cube3.rotation.y += 0.01;
+      moveCubeUp(0.01, cube);
+      moveCubeUp(0.01, cube2);
+      moveCubeUp(0.01, cube3);
+
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
+    animate();
 
 
     function moveCubeUp(speed, cube) {
@@ -55,34 +81,6 @@
         going_back = 0;
       }
     }
-
-    //
-
-    camera.position.z = 5;
-
-
-    function animate() {
-      cube.rotation.x += 0.01;
-      cube.rotation.y += 0.01;
-      console.log(`The y position is ${cube.position.y}`);
-      if (!going_back) {
-        cube.position.y += 0.01;
-      }
-      else {
-        cube.position.y -= 0.01;
-      }
-      if (cube.position.y > 2) {
-        going_back = 1;
-      }
-      if (cube.position.y < -2) {
-        going_back = 0;
-
-      }
-
-      requestAnimationFrame(animate);
-      renderer.render(scene, camera);
-    }
-    animate();
   </script>
 </body>
 
